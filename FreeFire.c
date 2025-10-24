@@ -7,8 +7,68 @@
 // Nível: Mestre
 // Este programa simula o gerenciamento avançado de uma mochila com componentes coletados durante a fuga de uma ilha.
 // Ele introduz ordenação com critérios e busca binária para otimizar a gestão dos recursos.
+#define MAX_ITENS 10 // CAPACIDADE MÁXIMA DA MOCHILA
+#define TAM_NOME 30  // TAMANHO MÁXIMO DO CAMPO NOME
+#define TAM_TIPO 20  // TAMANHO MÁXIMO DO TIPO
 
-int main() {
+typedef struct // definição da struct item
+{
+    char nome[TAM_NOME];
+    char tipo[TAM_TIPO];
+    int quantidade;
+} item;
+
+// variável global
+item mochila[MAX_ITENS]; // vetor que armazena os itens
+int total = 0;           // número atual de itens na mochila
+
+void limparBuffer(void) // Limpar o buffer stdin
+{
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
+// inserir itens
+void inserirItem(void)
+{
+    if (total >= MAX_ITENS)
+    {
+        printf("\n>>> A mochila já está cheia (máx. %d itens).\n", MAX_ITENS);
+        return;
+    }
+
+    printf("\n=== Cadastro de novo item ===\n");
+
+    printf("Nome do item (até %d caracteres): ", TAM_NOME - 1);
+    fgets(mochila[total].nome, TAM_NOME, stdin);
+    mochila[total].nome[strcspn(mochila[total].nome, "\n")] = '\0'; // remove o '\n'
+
+    printf("Tipo (arma, munição, cura, ferramenta...): ");
+    fgets(mochila[total].tipo, TAM_TIPO, stdin);
+    mochila[total].tipo[strcspn(mochila[total].tipo, "\n")] = '\0';
+
+    printf("Quantidade: ");
+    scanf("%d", &mochila[total].quantidade);
+    limparBuffer();
+
+    total++;
+    printf("\n>>> Item cadastrado com sucesso!\n");
+}
+
+// remover item()
+void removerItem(void)
+{
+    if (total == 0)
+    {
+        printf("\n>>> Não há itens para remover.\n");
+        return;
+    }
+
+    char nomeBusca[TAM_NOME];
+}
+
+int main()
+{
     // Menu principal com opções:
     // 1. Adicionar um item
     // 2. Remover um item
