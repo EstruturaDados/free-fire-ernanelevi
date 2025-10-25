@@ -65,10 +65,112 @@ void removerItem(void)
     }
 
     char nomeBusca[TAM_NOME];
+    printf("\n=== Remover Item ===\n");
+    printf("Informe o nome do item a ser removido: ");
+    fgets(nomeBusca, TAM_NOME, stdin);
+    nomeBusca[strcspn(nomeBusca, "\n")] = '\0';
+
+    int pos = -1;
+    for (int i = 0; i < total; i++)
+    {
+        if (strcmp(mochila[i].nome, nomeBusca) == 0)
+        {
+            pos = i;
+            break;
+        }
+    }
+
+    if (pos == -1)
+    {
+        printf("\n>>> Item %s não encontrado.\n", nomeBusca);
+        return;
+    }
+
+    // desloca item posterior para posição anterior
+    for (int i = pos; i < total - 1; i++)
+    {
+        mochila[i] = mochila[i + 1];
+    }
+    total--;
+    printf("\n>>> Item %s removido com sucesso.\n", nomeBusca);
 }
 
-int main()
+// listar itens()
+void listaItens(void)
 {
+    printf("\n=== Itens na mochila (%d/%d) ===\n", total, MAX_ITENS);
+    if (total == 0)
+    {
+        printf("Nenhum item cadastrado.\n");
+        return;
+    }
+
+    for (int i = 0; i < total; i++)
+    {
+        printf("[%d] Nome: %-30s Tipo %-20s Quantidade: %d\n",
+        i + 1,
+        mochila[i].nome,
+        mochila[i].tipo,
+        mochila[i].quantidade);
+    }
+}
+
+// buscar item()
+void buscarItem(void)
+{
+    if (total == 0)
+    {
+        printf("\n>>> Não há itens para buscar.\n");
+        return;
+    }
+
+    char nomeBusca[TAM_NOME];
+    printf("\n=== Busca de item ===\n");
+    printf("Informe o nome do item a ser localizado: ");
+    fgets(nomeBusca, TAM_NOME, stdin);
+    nomeBusca[strcspn(nomeBusca, "\n")] = '\0';
+
+    for (int i = 0; i < total; i++)
+    {
+        if (strcmp(mochila[i].nome, nomeBusca) == 0)
+        {
+            printf("\n>>> Item encontrado:\n");
+            printf("Nome: %s\nTipo: %s\nQuantidade: %d\n",
+                mochila[i].nome,
+                mochila[i].tipo,
+                mochila[i].quantidade);
+            return;
+        }
+    }
+    printf("\n>>> Item %s não encontrado.\n", nomeBusca);
+}
+
+int main(void)
+{
+    int opcao;
+
+    while (1)
+    {
+        printf("\n==== MENU INVENTÁRIO ====\n");
+        printf("1 - Cadastrar Item\n");
+        printf("2 - Remover Item\n");
+        printf("3 - Listar Itens\n");
+        printf("4 - Buscar Item\n");
+        printf("0 - Sair\n");
+        printf("Escolha uma opção: ");
+        scanf("%d", &opcao);
+        limparBuffer(); // limpa o '\n'
+
+        switch (opcao)
+        {
+            case 1: inserirItem(); break;
+            case 2: removerItem(); break;
+            case 3: listaItens(); break;
+            case 4: buscarItem(); break;
+            case 0: printf("\nEncerrando... Boa Sorte!\n"); return 0;
+            default: printf("\nOpção inválida! Tente novamente.\n");
+        }
+    }
     // Menu principal com opções:
     // 1. Adicionar um item
     // 2. Remover um item
